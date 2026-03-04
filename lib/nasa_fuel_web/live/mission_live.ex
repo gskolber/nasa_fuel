@@ -38,7 +38,8 @@ defmodule NasaFuelWeb.MissionLive do
     step = {action, planet}
 
     steps = socket.assigns.steps ++ [step]
-    socket = assign(socket, steps: steps)
+    form = to_form(params, as: :mission)
+    socket = assign(socket, steps: steps, form: form)
     socket = recalculate(socket)
 
     {:noreply, socket}
