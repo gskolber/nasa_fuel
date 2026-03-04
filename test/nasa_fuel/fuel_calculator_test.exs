@@ -4,13 +4,11 @@ defmodule NasaFuel.FuelCalculatorTest do
   alias NasaFuel.FuelCalculator
 
   describe "fuel_for_step/3" do
-    test "calculates fuel for landing on earth (single step, no recursion check)" do
-      # 28801 * 9.807 * 0.033 - 42 = 9278 (first iteration only)
+    test "calculates fuel for landing on earth" do
       assert FuelCalculator.fuel_for_step(:land, 28_801, :earth) == 13_447
     end
 
     test "calculates fuel for launch from earth" do
-      # launch uses mass * gravity * 0.042 - 33
       fuel = FuelCalculator.fuel_for_step(:launch, 28_801, :earth)
       assert fuel > 0
       assert is_integer(fuel)
