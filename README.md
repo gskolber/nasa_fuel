@@ -1,18 +1,53 @@
-# NasaFuel
+# NASA Fuel Calculator
 
-To start your Phoenix server:
+A Phoenix LiveView application that calculates fuel requirements for interplanetary missions.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## How it works
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Users build a flight path by adding launch/land steps for different planets, input the spacecraft mass, and the app calculates total fuel in real-time.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Fuel is computed recursively: the weight of fuel itself requires additional fuel, until the additional amount is zero or negative.
 
-## Learn more
+**Formulas:**
+- Launch: `mass * gravity * 0.042 - 33` (rounded down)
+- Landing: `mass * gravity * 0.033 - 42` (rounded down)
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://hexdocs.pm/phoenix/overview.html
-* Docs: https://hexdocs.pm/phoenix
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+**Supported planets:** Earth (9.807), Moon (1.62), Mars (3.711)
+
+## Example scenarios
+
+| Mission | Mass (kg) | Path | Total Fuel (kg) |
+|---|---|---|---|
+| Apollo 11 | 28,801 | Launch Earth, Land Moon, Launch Moon, Land Earth | 51,898 |
+| Mars | 14,606 | Launch Earth, Land Mars, Launch Mars, Land Earth | 33,388 |
+| Passenger Ship | 75,432 | Launch Earth, Land Moon, Launch Moon, Land Mars, Launch Mars, Land Earth | 212,161 |
+
+## Getting started
+
+```bash
+mix setup
+mix phx.server
+```
+
+Visit [`localhost:4000`](http://localhost:4000).
+
+## Running tests
+
+```bash
+mix test
+```
+
+## Code quality
+
+```bash
+mix credo --strict      # linting
+mix dialyzer            # static analysis
+MIX_ENV=test mix coveralls  # test coverage
+mix precommit           # runs all checks
+```
+
+## Tech stack
+
+- Elixir 1.18 / Erlang/OTP 27
+- Phoenix 1.8 with LiveView
+- Tailwind CSS with daisyUI

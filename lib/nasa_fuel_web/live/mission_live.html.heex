@@ -25,7 +25,11 @@
           <.input field={@form[:planet]} type="select" label="Planet" options={@planets} />
         </div>
         <div class="mb-2">
-          <button type="submit" id="add-step-btn" class="px-4 py-2 rounded-lg bg-primary text-primary-content font-medium hover:brightness-110 transition-all cursor-pointer">
+          <button
+            type="submit"
+            id="add-step-btn"
+            class="px-4 py-2 rounded-lg bg-primary text-primary-content font-medium hover:brightness-110 transition-all cursor-pointer"
+          >
             Add
           </button>
         </div>
@@ -42,11 +46,17 @@
       <% else %>
         <div id="flight-steps" class="space-y-2">
           <%= for {{action, planet}, index} <- Enum.with_index(@steps) do %>
-            <div id={"step-#{index}"} class="flex items-center justify-between rounded-lg border border-base-300 bg-base-200/50 px-4 py-3">
+            <div
+              id={"step-#{index}"}
+              class="flex items-center justify-between rounded-lg border border-base-300 bg-base-200/50 px-4 py-3"
+            >
               <div class="flex items-center gap-3">
                 <span class={[
                   "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold",
-                  if(action == :launch, do: "bg-info/20 text-info", else: "bg-success/20 text-success")
+                  if(action == :launch,
+                    do: "bg-info/20 text-info",
+                    else: "bg-success/20 text-success"
+                  )
                 ]}>
                   {index + 1}
                 </span>
@@ -78,7 +88,9 @@
           </div>
           <div>
             <div class="text-base-content/60">Total Fuel Required</div>
-            <div id="total-fuel" class="text-xl font-bold text-primary">{format_number(@total_fuel)} kg</div>
+            <div id="total-fuel" class="text-xl font-bold text-primary">
+              {format_number(@total_fuel)} kg
+            </div>
           </div>
           <div>
             <div class="text-base-content/60">Flight Steps</div>

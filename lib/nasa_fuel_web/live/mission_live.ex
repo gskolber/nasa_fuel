@@ -26,7 +26,9 @@ defmodule NasaFuelWeb.MissionLive do
         total_fuel: nil,
         errors: %{}
       )
-      |> assign(form: to_form(%{"mass" => "", "action" => "launch", "planet" => "earth"}, as: :mission))
+      |> assign(
+        form: to_form(%{"mass" => "", "action" => "launch", "planet" => "earth"}, as: :mission)
+      )
 
     {:ok, socket}
   end
@@ -72,10 +74,15 @@ defmodule NasaFuelWeb.MissionLive do
   end
 
   defp parse_mass(""), do: {:error, "mass is required"}
+
   defp parse_mass(str) do
     case Integer.parse(str) do
-      {n, ""} when n > 0 -> {:ok, n}
-      {n, ""} when n <= 0 -> {:error, "mass must be positive"}
+      {n, ""} when n > 0 ->
+        {:ok, n}
+
+      {n, ""} when n <= 0 ->
+        {:error, "mass must be positive"}
+
       _ ->
         case Float.parse(str) do
           {n, ""} when n > 0 -> {:ok, trunc(n)}
