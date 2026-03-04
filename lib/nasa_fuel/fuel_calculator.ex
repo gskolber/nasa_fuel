@@ -1,4 +1,11 @@
 defmodule NasaFuel.FuelCalculator do
+  @moduledoc """
+  Calculates fuel requirements for interplanetary missions.
+
+  Fuel is computed recursively: the weight of fuel itself requires
+  additional fuel, until the additional amount is zero or negative.
+  """
+
   @gravities %{
     earth: 9.807,
     moon: 1.62,

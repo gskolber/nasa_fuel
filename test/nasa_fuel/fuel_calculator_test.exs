@@ -6,18 +6,18 @@ defmodule NasaFuel.FuelCalculatorTest do
   describe "fuel_for_step/3" do
     test "calculates fuel for landing on earth (single step, no recursion check)" do
       # 28801 * 9.807 * 0.033 - 42 = 9278 (first iteration only)
-      assert FuelCalculator.fuel_for_step(:land, 28801, :earth) == 13447
+      assert FuelCalculator.fuel_for_step(:land, 28_801, :earth) == 13_447
     end
 
     test "calculates fuel for launch from earth" do
       # launch uses mass * gravity * 0.042 - 33
-      fuel = FuelCalculator.fuel_for_step(:launch, 28801, :earth)
+      fuel = FuelCalculator.fuel_for_step(:launch, 28_801, :earth)
       assert fuel > 0
       assert is_integer(fuel)
     end
 
     test "calculates fuel for landing on moon" do
-      fuel = FuelCalculator.fuel_for_step(:land, 28801, :moon)
+      fuel = FuelCalculator.fuel_for_step(:land, 28_801, :moon)
       assert fuel > 0
       assert is_integer(fuel)
     end
@@ -32,7 +32,7 @@ defmodule NasaFuel.FuelCalculatorTest do
         {:land, :earth}
       ]
 
-      assert FuelCalculator.calculate(28801, path) == 51898
+      assert FuelCalculator.calculate(28_801, path) == 51_898
     end
 
     test "mars mission: launch earth, land mars, launch mars, land earth" do
@@ -43,7 +43,7 @@ defmodule NasaFuel.FuelCalculatorTest do
         {:land, :earth}
       ]
 
-      assert FuelCalculator.calculate(14606, path) == 33388
+      assert FuelCalculator.calculate(14_606, path) == 33_388
     end
 
     test "passenger ship: launch earth, land moon, launch moon, land mars, launch mars, land earth" do
@@ -56,11 +56,11 @@ defmodule NasaFuel.FuelCalculatorTest do
         {:land, :earth}
       ]
 
-      assert FuelCalculator.calculate(75432, path) == 212_161
+      assert FuelCalculator.calculate(75_432, path) == 212_161
     end
 
     test "returns 0 for empty path" do
-      assert FuelCalculator.calculate(28801, []) == 0
+      assert FuelCalculator.calculate(28_801, []) == 0
     end
   end
 
