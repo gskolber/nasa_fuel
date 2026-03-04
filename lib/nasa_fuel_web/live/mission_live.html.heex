@@ -1,0 +1,95 @@
+<Layouts.app flash={@flash}>
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold tracking-tight mb-2">NASA Fuel Calculator</h1>
+    <p class="text-base-content/60 mb-8 text-sm">
+      Calculate fuel requirements for interplanetary missions
+    </p>
+
+    <.form for={@form} id="mission-form" phx-change="validate" phx-submit="add_step">
+      <.input
+        field={@form[:mass]}
+        type="number"
+        label="Spacecraft Mass (kg)"
+        placeholder="e.g. 28801"
+        min="1"
+        step="1"
+      />
+      <p :if={@errors[:mass]} class="text-error text-sm mt-1">{@errors[:mass]}</p>
+
+      <div class="mt-6 mb-2 text-sm font-semibold">Add Flight Step</div>
+      <div class="flex gap-3 items-end">
+        <div class="flex-1">
+          <.input field={@form[:action]} type="select" label="Action" options={@actions} />
+        </div>
+        <div class="flex-1">
+          <.input field={@form[:planet]} type="select" label="Planet" options={@planets} />
+        </div>
+        <div class="mb-2">
+          <button type="submit" id="add-step-btn" class="px-4 py-2 rounded-lg bg-primary text-primary-content font-medium hover:brightness-110 transition-all cursor-pointer">
+            Add
+          </button>
+        </div>
+      </div>
+    </.form>
+
+    <div class="mt-8">
+      <h2 class="text-lg font-semibold mb-3">Flight Path</h2>
+
+      <%= if @steps == [] do %>
+        <p id="empty-path" class="text-base-content/50 text-sm italic">
+          No steps added yet. Build your flight path above.
+        </p>
+      <% else %>
+        <div id="flight-steps" class="space-y-2">
+          <%= for {{action, planet}, index} <- Enum.with_index(@steps) do %>
+            <div id={"step-#{index}"} class="flex items-center justify-between rounded-lg border border-base-300 bg-base-200/50 px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class={[
+                  "inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold",
+                  if(action == :launch, do: "bg-info/20 text-info", else: "bg-success/20 text-success")
+                ]}>
+                  {index + 1}
+                </span>
+                <span class="font-medium">{action_label(action)}</span>
+                <span class="text-base-content/50">-</span>
+                <span>{planet_label(planet)}</span>
+              </div>
+              <button
+                phx-click="remove_step"
+                phx-value-index={index}
+                class="text-base-content/40 hover:text-error transition-colors cursor-pointer"
+                aria-label="Remove step"
+              >
+                <.icon name="hero-x-mark" class="size-5" />
+              </button>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= if @total_fuel do %>
+      <div id="results" class="mt-8 rounded-lg border-2 border-primary/30 bg-primary/5 p-6">
+        <h2 class="text-lg font-semibold mb-4">Mission Summary</h2>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <div class="text-base-content/60">Spacecraft Mass</div>
+            <div class="text-xl font-bold">{@mass} kg</div>
+          </div>
+          <div>
+            <div class="text-base-content/60">Total Fuel Required</div>
+            <div id="total-fuel" class="text-xl font-bold text-primary">{format_number(@total_fuel)} kg</div>
+          </div>
+          <div>
+            <div class="text-base-content/60">Flight Steps</div>
+            <div class="text-xl font-bold">{length(@steps)}</div>
+          </div>
+          <div>
+            <div class="text-base-content/60">Total Launch Mass</div>
+            <div class="text-xl font-bold">{format_number(@mass + @total_fuel)} kg</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</Layouts.app>
